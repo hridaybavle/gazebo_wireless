@@ -1,0 +1,4 @@
+<launch>
+ <node name="wireless_listen" pkg="gazebo_wireless" type="wireless_listen" output="screen"/>
+
+</launch>
