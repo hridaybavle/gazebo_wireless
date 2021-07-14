@@ -32,7 +32,7 @@ int main(int _argc, char **_argv)
 
   // Subscribe to a topic
   gazebo::transport::SubscriberPtr sub_1 = node->Subscribe("/gazebo/default/wirelessTransmitter/link/wirelessTransmitter/transceiver", trans_subs);
-  gazebo::transport::SubscriberPtr sub_2 = node->Subscribe("/gazebo/default/wirelessTransmitter/link/wirelessTransmitter/transceiver", receiver_subs);
+  gazebo::transport::SubscriberPtr sub_2 = node->Subscribe("/gazebo/default/iris_opt_flow/wirelessReceiver/link/wirelessReceiver/transceiver", receiver_subs);
 
  
   // shutting down
