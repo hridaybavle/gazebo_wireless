@@ -12,17 +12,50 @@
 #include <sensor_msgs/ChannelFloat32.h>
 #include <gazebo_wireless/Rss_level.h>
 //#include <gazebo/gazebo_client.hh>
-
 //gazebo::msgs::WirelessNodes NodesMsg;
 
-float sig_level;
+  int nthSubstr(int n, const std::string& s,
+              const std::string& p) {
+              size_t i = s.find(p);     // Find the first occurrence
+
+   int j;
+   for (j = 1; j < n && i != std::string::npos; ++j)
+      i = s.find(p, i+1); // Find the next occurrence
+
+   if (j == n)
+     return(i);
+   else
+     return(-1);
+}
+
+
+
+float sig_level1;
+float sig_level2;
+float sig_level3;
 void receiver_subs(ConstWirelessNodesPtr &msg)
 {
     std::string raw_msg = msg->DebugString();
-    size_t index = raw_msg.find("signal_level");
-    std::string sig_lev_str = raw_msg.substr(index+13, 15);
-    std::cout << sig_lev_str << std::endl;
-    sig_level = std::stof(sig_lev_str);
+    size_t occur1 = raw_msg.find("signal_level:");
+    size_t occur2 = raw_msg.find("signal_level:", occur1+1);
+    size_t occur3 = raw_msg.find("signal_level:", occur2+1);
+    //size_t occur1 = 43; size_t occur2 = 121; size_t occur3 = 201;  
+
+
+    std::string sig_lev_str1 = raw_msg.substr(occur1+13, 15);
+    std::string sig_lev_str2 = raw_msg.substr(occur2+13, 15);
+    std::string sig_lev_str3 = raw_msg.substr(occur3+13, 15);
+    
+    sig_level1 = std::stof(sig_lev_str1);
+    sig_level2 = std::stof(sig_lev_str2);
+    if (occur3 <1000){
+      sig_level3 = std::stof(sig_lev_str3);
+    } else{
+       sig_level3 = 0.0; 
+    }
+    
+    std::cout << sig_lev_str1 <<"\n"<<sig_lev_str2 <<"\n"<<sig_lev_str3 <<"\n-----------------\n" <<std::endl;
+
 }
 
 int main(int _argc, char **_argv)
@@ -46,11 +79,15 @@ int main(int _argc, char **_argv)
 
   //publish on Ros
 
+
+
   ros::init(_argc, _argv, "talker");
   ros::NodeHandle n;
-  ros::Publisher chatter_pub = n.advertise<gazebo_wireless::Rss_level>("/receiver_rss", 1000);
+  ros::Publisher chatter_pub = n.advertise<gazebo_wireless::Rss_level>("/receiver_rss", 300);
   gazebo_wireless::Rss_level NodeMsg;
-  NodeMsg.signal_level = sig_level;
+  NodeMsg.signal_level1 = sig_level1;
+  NodeMsg.signal_level2 = sig_level2;
+  NodeMsg.signal_level3 = sig_level3;
   
 
   ros::Rate loop_rate(10);
