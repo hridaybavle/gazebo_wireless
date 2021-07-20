@@ -24,7 +24,7 @@ generate_messages(
 
 
 catkin_package(
-    INCLUDE_DIRS include
+    #INCLUDE_DIRS include
     CATKIN_DEPENDS gazebo_ros message_runtime roscpp
 )
 
@@ -33,7 +33,8 @@ catkin_package(
 
 
 include_directories(
-  include ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS}
+  #include 
+  ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS}
 )
 
 link_directories(${GAZEBO_LIBRARY_DIRS})
